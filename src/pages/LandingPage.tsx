@@ -6,7 +6,6 @@ import {
   BriefcaseBusiness,
   Clock,
   GraduationCap,
-  Instagram,
   MapPin,
   MessageCircle,
   Play,
@@ -111,6 +110,14 @@ export default function LandingPage() {
 
   const trainings = courses?.filter((c) => c.category === "training" || c.category === "game") ?? [];
   const ytCourses = courses?.filter((c) => c.category === "youtube") ?? [];
+
+  function getCategoryTag(course: { category: string; badge?: string }) {
+    if (course.badge === "Трансформационная игра") return "Трансформационная игра";
+    if (course.badge === "Бизнес-игра") return "Бизнес-игра";
+    if (course.category === "game") return "Игра";
+    if (course.category === "youtube") return "Видеокурс";
+    return "Тренинг";
+  }
 
   return (
     <div className="min-h-screen">
@@ -286,12 +293,15 @@ export default function LandingPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {trainings.map((course) => (
               <Card key={course._id} className="group relative flex flex-col overflow-hidden transition hover:shadow-lg">
-                {course.badge && (
+                {course.badge && course.badge !== "Тренинг" && course.badge !== "Бизнес-игра" && course.badge !== "Трансформационная игра" && (
                   <Badge className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground">
                     {course.badge}
                   </Badge>
                 )}
                 <CardHeader className="pb-2">
+                  <Badge className="w-fit bg-primary/10 text-primary border border-primary/20 hover:bg-primary/10 mb-1">
+                    {getCategoryTag(course)}
+                  </Badge>
                   <CardTitle className="text-lg">{course.title}</CardTitle>
                   <CardDescription className="line-clamp-3">{course.description}</CardDescription>
                 </CardHeader>
@@ -344,9 +354,9 @@ export default function LandingPage() {
                 {ytCourses.map((course) => (
                   <Card key={course._id} className="group flex flex-col overflow-hidden transition hover:shadow-lg">
                     <CardHeader className="relative pb-2">
-                      <Badge variant="secondary" className="mb-2 w-fit">
+                      <Badge className="w-fit bg-primary/10 text-primary border border-primary/20 hover:bg-primary/10 mb-1">
                         <Play className="mr-1 h-3 w-3" />
-                        {course.badge}
+                        Видеокурс
                       </Badge>
                       <CardTitle className="text-lg">{course.title}</CardTitle>
                       <CardDescription className="line-clamp-3">{course.description}</CardDescription>
@@ -576,17 +586,17 @@ export default function LandingPage() {
               </a>
 
               <a
-                href="https://www.instagram.com/elenakolos_trainer"
+                href="https://vk.ru/elenakolos2022"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-4 rounded-xl p-3 transition hover:bg-accent/50"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                  <Instagram className="h-5 w-5 text-primary" />
+                  <Users className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Instagram</h3>
-                  <p className="text-muted-foreground">@elenakolos_trainer</p>
+                  <h3 className="font-semibold">ВКонтакте</h3>
+                  <p className="text-muted-foreground">Елена Колос</p>
                 </div>
               </a>
             </div>
@@ -597,8 +607,7 @@ export default function LandingPage() {
       {/* ═══════ FOOTER ═══════ */}
       <footer className="border-t bg-white py-8">
         <div className="container mx-auto max-w-6xl px-4 text-center text-sm text-muted-foreground">
-          <p>© 2026 Елена Колос. Все права защищены.</p>
-          <p className="mt-1">ИП «Международный образовательный центр ICE»</p>
+          <p>© 2026 ИП Международный образовательный центр "ICE". Все права защищены.</p>
         </div>
       </footer>
     </div>

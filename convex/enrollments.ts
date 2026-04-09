@@ -67,12 +67,31 @@ export const enroll = mutation({
       return existing._id;
     }
 
-    return await ctx.db.insert("enrollments", {
+    const enrollmentId = await ctx.db.insert("enrollments", {
       userId,
       courseId: args.courseId,
       stripePaymentIntentId: args.stripePaymentIntentId,
       enrolledAt: Date.now(),
       status: "active",
     });
+
+    // Queue WhatsApp notification to Elena
+    const course = await ctx.db.get(args.courseId);
+    const user = await ctx.db.get(userId);
+    const email = user?.email ?? "—";
+    const courseName = course?.title ?? "Неизвестный курс";
+    const ELENA_PHONE = "77083856750";
+    const msg = `🎓 Новая покупка курса!\n\n📚 Курс: ${courseName}\n📧 Покупатель: ${email}`;
+    await ctx.db.insert("notifications", {
+      type: "enrollment",
+      recipientPhone: ELENA_PHONE,
+      courseName,
+      buyerEmail: email,
+      message: msg,
+      status: "pending",
+      createdAt: Date.now(),
+    });
+
+    return enrollmentId;
   },
 });

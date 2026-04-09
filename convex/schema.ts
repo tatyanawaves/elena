@@ -80,6 +80,28 @@ const schema = defineSchema({
   })
     .index("by_status", ["status"])
     .index("by_email", ["email"]),
+  // WhatsApp notification queue
+  notifications: defineTable({
+    type: v.union(
+      v.literal("enrollment"),
+      v.literal("application"),
+    ),
+    recipientPhone: v.string(),       // Elena's WhatsApp
+    courseName: v.string(),
+    buyerEmail: v.string(),
+    buyerName: v.optional(v.string()),
+    buyerPhone: v.optional(v.string()),
+    message: v.string(),              // formatted message text
+    status: v.union(
+      v.literal("pending"),
+      v.literal("sent"),
+      v.literal("failed"),
+    ),
+    createdAt: v.number(),
+    sentAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status"])
+    .index("by_created", ["createdAt"]),
 });
 
 export default schema;

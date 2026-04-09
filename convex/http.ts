@@ -48,4 +48,50 @@ http.route({
   }),
 });
 
+// Notification queue: get pending notifications
+http.route({
+  path: "/admin/notifications/pending",
+  method: "GET",
+  handler: httpAction(async (ctx) => {
+    const pending = await ctx.runQuery(internal.notifications.getPending);
+    return new Response(JSON.stringify({ notifications: pending }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }),
+});
+
+// Notification queue: mark as sent
+http.route({
+  path: "/admin/notifications/mark-sent",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const body = await request.json();
+    const id = body.id;
+    if (!id) {
+      return new Response(JSON.stringify({ error: "id required" }), { status: 400 });
+    }
+    await ctx.runMutation(internal.notifications.markSent, { id });
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }),
+});
+
+// Notification queue: mark as failed
+http.route({
+  path: "/admin/notifications/mark-failed",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const body = await request.json();
+    const id = body.id;
+    if (!id) {
+      return new Response(JSON.stringify({ error: "id required" }), { status: 400 });
+    }
+    await ctx.runMutation(internal.notifications.markFailed, { id });
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }),
+});
+
 export default http;

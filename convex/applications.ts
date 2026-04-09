@@ -12,11 +12,28 @@ export const submit = mutation({
   },
   returns: v.id("applications"),
   handler: async (ctx, args) => {
-    return await ctx.db.insert("applications", {
+    const appId = await ctx.db.insert("applications", {
       ...args,
       status: "new",
       createdAt: Date.now(),
     });
+
+    // Queue WhatsApp notification to Elena
+    const ELENA_PHONE = "77083856750";
+    const msg = `📩 Новая заявка на курс!\n\n📚 Курс: ${args.courseName}\n👤 Имя: ${args.name}\n📧 Email: ${args.email}${args.phone ? `\n📱 Тел: ${args.phone}` : ""}${args.message ? `\n💬 Сообщение: ${args.message}` : ""}`;
+    await ctx.db.insert("notifications", {
+      type: "application",
+      recipientPhone: ELENA_PHONE,
+      courseName: args.courseName,
+      buyerEmail: args.email,
+      buyerName: args.name,
+      buyerPhone: args.phone,
+      message: msg,
+      status: "pending",
+      createdAt: Date.now(),
+    });
+
+    return appId;
   },
 });
 
