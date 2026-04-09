@@ -51,7 +51,7 @@ export default function MyCoursesPage() {
             <Card
               key={course._id}
               className="group cursor-pointer transition hover:shadow-lg"
-              onClick={() => navigate(`/course/${course.slug}`)}
+              onClick={() => navigate(`/learn/${course.slug}`)}
             >
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">

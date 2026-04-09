@@ -14,6 +14,7 @@ import {
   SettingsPage,
   SignupPage,
 } from "./pages";
+import CourseViewPage from "./pages/CourseViewPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/my-courses" element={<MyCoursesPage />} />
+              <Route path="/learn/:slug" element={<CourseViewPage />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
           </Route>

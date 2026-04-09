@@ -9,6 +9,7 @@
  */
 
 import type * as ViktorSpacesEmail from "../ViktorSpacesEmail.js";
+import type * as adminActions from "../adminActions.js";
 import type * as adminEnroll from "../adminEnroll.js";
 import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
@@ -30,6 +31,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   ViktorSpacesEmail: typeof ViktorSpacesEmail;
+  adminActions: typeof adminActions;
   adminEnroll: typeof adminEnroll;
   applications: typeof applications;
   auth: typeof auth;
